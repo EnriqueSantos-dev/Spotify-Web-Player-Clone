@@ -7,8 +7,14 @@ module.exports = {
         green: {
           600: "#1DB954",
         },
+        gray: {
+          500: "#b3b3b3",
+        },
+      },
+      backgroundImage: {
+        "like-heart": "linear-gradient(135deg,#450af5,#c4efd9)",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
 };
