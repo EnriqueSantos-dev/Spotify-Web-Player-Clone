@@ -30,8 +30,6 @@ async function generateRefreshToken(token: JWT): Promise<ResponseRefreshToken> {
       refreshToken: refreshAccessToken.refresh_token ?? token.refreshToken,
     };
   } catch (err) {
-    console.log(err);
-
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -57,8 +55,8 @@ const authOptions: NextAuthOptions = {
       if (token && account) {
         return {
           ...token,
-          access_token: account.accessToken,
-          refresh_token: account.refreshToken,
+          accessToken: account.access_token!,
+          refreshToken: account.refresh_token!,
           username: account.providerAccountId,
           accessTokenExpiresAt: account.expires_at! * 1000, // convert to ms
         };
@@ -74,7 +72,7 @@ const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      session.accessToken = token.access_token as string;
+      session.accessToken = token.accessToken;
       session.error = token.error as string;
       session.user.username = token.username as string;
 
