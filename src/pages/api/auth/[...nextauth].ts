@@ -86,7 +86,7 @@ const authOptions: NextAuthOptions = {
       authorization: LOGIN_URL,
     }),
   ],
-  secret: process.env.JWT_SECRET as string,
+  secret: process.env.NEXTAUTH_SECRET as string,
   pages: {
     signIn: "/login",
   },
