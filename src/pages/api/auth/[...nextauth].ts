@@ -1,10 +1,8 @@
+import axios from "axios";
 import type { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth/next";
 import SpotifyProvider from "next-auth/providers/spotify";
-import spotifyApi, {
-  LOGIN_URL,
-} from "../../../lib/spotify-web-api-setup-config";
 
 type ResponseRefreshToken =
   | SuccessRefreshTokenResponse
@@ -16,18 +14,61 @@ type ErrorRefreshTokenResponse = JWT & {
   error: string;
 };
 
+const scopes = [
+  "user-read-private",
+  "user-read-email",
+  "user-top-read",
+  "user-follow-read",
+  "user-library-modify",
+  "playlist-modify-private",
+  "user-read-playback-state",
+  "user-modify-playback-state",
+  "user-read-currently-playing",
+  "user-read-recently-played",
+  "user-library-read",
+  "streaming",
+  "playlist-read-private",
+  "playlist-read-collaborative",
+  "playlist-modify-private",
+  "playlist-modify-public",
+  "user-follow-read",
+].join(",");
+
+const params = {
+  scope: scopes,
+};
+
+const queryStringParams = new URLSearchParams(params);
+
+const LOGIN_URL =
+  "https://accounts.spotify.com/authorize?" + queryStringParams.toString();
+
 async function generateRefreshToken(token: JWT): Promise<ResponseRefreshToken> {
   try {
-    spotifyApi.setAccessToken(token.accessToken);
-    spotifyApi.setRefreshToken(token.refreshToken);
+    const url =
+      "https://accounts.spotify.com/authorize?" +
+      new URLSearchParams({
+        client_id: process.env.SPOTIFY_CLIENT_ID as string,
+        client_secret: process.env.SPOTIFY_SECRET as string,
+        grant_type: "refresh_token",
+        refresh_token: token.refreshToken,
+      });
 
-    const { body: refreshAccessToken } = await spotifyApi.refreshAccessToken();
+    const response = await axios.post(url, null, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
+
+    const refreshToken = response.data.access_token;
+
+    if (!(response.status === 200)) {
+      throw new Error("RefreshAccessTokenError");
+    }
 
     return {
       ...token,
-      accessToken: refreshAccessToken.access_token,
-      accessTokenExpiresAt: Date.now() * refreshAccessToken.expires_in * 1000, // = 1 hour as 3600 returns from spotify Api
-      refreshToken: refreshAccessToken.refresh_token ?? token.refreshToken,
+      accessToken: refreshToken,
+      accessTokenExpiresAt: Date.now() * response.data.expires_in * 1000, // = 1 hour as 3600 returns from spotify Api
+      refreshToken: refreshToken ?? token.refreshToken,
     };
   } catch (err) {
     return {
@@ -73,6 +114,7 @@ const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       session.accessToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
       session.error = token.error as string;
       session.user.username = token.username as string;
 
