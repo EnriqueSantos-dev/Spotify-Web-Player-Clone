@@ -38,14 +38,14 @@ const Song: React.FC<Props> = ({ order, track }) => {
         {currentSong?.id === track?.id ? (
           isPlaying ? (
             <button
-              className="transition-colors block group-hover:m-0 z-10"
+              className="transition-colors block group-hover:m-0"
               onClick={handlePlay}
             >
               <PauseIcon className="w-4 h-4 stroke-2 hover:text-white" />
             </button>
           ) : (
             <button
-              className="transition-colors block group-hover:m-0 z-10"
+              className="transition-colors block group-hover:m-0"
               onClick={handlePlay}
             >
               <PlayIcon className="w-4 h-4 hover:text-white" />
