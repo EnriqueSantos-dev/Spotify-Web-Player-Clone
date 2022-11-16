@@ -11,15 +11,6 @@ import { toast } from "react-toastify";
 import useSpotifyAxios from "./useSpotifyAxios";
 import { debounce } from "lodash";
 
-type ReturnfetchCurrentSong = {
-  volumeCurrent: number | null;
-  isRepeatSongActive: RepeatState;
-  isShuffle: ShuffleState;
-  progress_ms: number | null;
-  error: string | null;
-  item: Track | null;
-};
-
 function usePlayer() {
   const { data: session } = useSession();
   const axiosApi = useSpotifyAxios();
@@ -30,42 +21,24 @@ function usePlayer() {
   const isPlaying = useSongStore((state) => state.isPlaying);
   const currentSong = useSongStore((state) => state.currentSong);
 
-  //@ts-ignore
-  const fetchCurrentSong =
-    React.useCallback(async (): Promise<ReturnfetchCurrentSong> => {
-      try {
-        const res = await axiosApi.get<CurrentStateTrack>("me/player");
-        const songCurrentInfo = res.data;
+  const fetchCurrentSong = React.useCallback(async (): Promise<void> => {
+    try {
+      const res = await axiosApi.get<CurrentStateTrack>("me/player");
+      const songCurrentInfo = res.data;
 
-        const resTrack = await axiosApi.get<Track>(
-          `/tracks/${songCurrentInfo.item.id}`
-        );
-        const track = resTrack.data;
+      const resTrack = await axiosApi.get<Track>(
+        `/tracks/${songCurrentInfo.item.id}`
+      );
+      const track = resTrack.data;
 
-        setSong(track);
-        setTogglePlayingSong(songCurrentInfo.is_playing);
+      setSong(track);
+      setTogglePlayingSong(songCurrentInfo.is_playing);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [axiosApi, setSong, setTogglePlayingSong]);
 
-        return {
-          volumeCurrent: songCurrentInfo.device.volume_percent,
-          isRepeatSongActive: songCurrentInfo.repeat_state,
-          error: null,
-          isShuffle: songCurrentInfo.shuffle_state,
-          progress_ms: songCurrentInfo.progress_ms,
-          item: songCurrentInfo.item as unknown as Track,
-        };
-      } catch (e) {
-        return {
-          volumeCurrent: null,
-          isRepeatSongActive: "off",
-          error: "Error fetchCurrentSong",
-          isShuffle: "off",
-          progress_ms: null,
-          item: null,
-        };
-      }
-    }, [axiosApi, setSong, setTogglePlayingSong]);
-
-  async function setPlaySong(track: Track) {
+  async function setPlaySong(track: Track): Promise<void> {
     try {
       await axiosApi.put("me/player/play", {
         uris: [track.uri],
@@ -78,7 +51,7 @@ function usePlayer() {
     }
   }
 
-  const togglePlayPause = debounce(async () => {
+  const togglePlayPause = debounce(async (): Promise<void> => {
     try {
       if (isPlaying) {
         await axiosApi.put("me/player/pause");
@@ -92,7 +65,7 @@ function usePlayer() {
     }
   }, 200);
 
-  async function setPauseSong() {
+  async function setPauseSong(): Promise<void> {
     try {
       await axiosApi.put("me/player/pause");
       setTogglePlayingSong(false);
@@ -101,7 +74,7 @@ function usePlayer() {
     }
   }
 
-  async function setShuffleSongs(state: boolean) {
+  async function setShuffleSongs(state: boolean): Promise<void> {
     try {
       await axiosApi.put("me/player/shuffle", null, {
         params: {
@@ -113,7 +86,7 @@ function usePlayer() {
     }
   }
 
-  async function setNextSong() {
+  async function setNextSong(): Promise<void> {
     try {
       const deviceActive = await getDeviceActive();
 
@@ -127,13 +100,11 @@ function usePlayer() {
       await axiosApi.post("me/player/next");
       await fetchCurrentSong();
     } catch (e) {
-      return {
-        error: "Error set next song",
-      };
+      console.log(e);
     }
   }
 
-  async function setPreviousSong() {
+  async function setPreviousSong(): Promise<void> {
     try {
       const deviceActive = await getDeviceActive();
       if (!deviceActive) {
@@ -145,12 +116,12 @@ function usePlayer() {
       await axiosApi.post("me/player/previous");
       await fetchCurrentSong();
     } catch (e) {
-      return {
-        error: "Error set previous Song",
-      };
+      console.log(e);
     }
   }
-  async function setRepeat(typeRepeat: "track" | "context" | "off") {
+  async function setRepeat(
+    typeRepeat: "track" | "context" | "off"
+  ): Promise<void> {
     try {
       const deviceActive = await getDeviceActive();
 
@@ -166,14 +137,12 @@ function usePlayer() {
           state: typeRepeat,
         },
       });
-    } catch (error) {
-      return {
-        error: "Error on set repeat song",
-      };
+    } catch (e) {
+      console.log(e);
     }
   }
 
-  const getDeviceActive = React.useCallback(async () => {
+  const getDeviceActive = React.useCallback(async (): Promise<boolean> => {
     try {
       const res = await axiosApi.get("me/player/devices");
       const deviceActive = res.data.devices.some(
