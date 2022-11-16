@@ -1,34 +1,49 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Spotify Web Play Clone
 
-## Getting Started
 
-First, run the development server:
+Esse Projeto é um clone do spotify web que implementa as funções de playback do usúario. Esse projeto foi feito utilizando a api do spotify e com o axios para os serviços http do lado do client. Por se tratar de um wep app feito com a api do github no final das contas ele não nada mais é que um controler remote para o seu spotify oficial, ou seja, para que tudo funcione bem você tem que está conectado no seu aplicatio do spotify ou no spotify web para que tudo funcione.
 
-```bash
-npm run dev
-# or
-yarn dev
+
+Ok, passado uma visão inicial de como o projeto foi pensado vamos a alguns detalhes de segurança. Para pode acessar o app no início da sua sessão será pedido que você faça login e aceite que o aplicativo tenha acesso a algumas informações sobre a sua conta do spotify, ressalto que os dados que você está me dando acesso são somente utilizados para fins de demo do aplicativo, a seguir os scopes que eu peço autorização.
+
+```
+  1. user-read-private,
+  2. user-read-email,
+  3. user-top-read,
+  4. user-follow-read,
+  5. user-library-modify,
+  6. playlist-modify-private,
+  7. user-read-playback-state,
+  8. user-modify-playback-state,
+  9. user-read-currently-playing,
+  10. user-read-recently-played,
+  11. user-library-read,
+  12. streaming,
+  13. playlist-read-private,
+  14. playlist-read-collaborative,
+  15. playlist-modify-private,
+  16. playlist-modify-public,
+  17. user-follow-read,
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Você pode consultar sobre os escopos nas documenteões do spotify.
+[https://developer.spotify.com/documentation/general/guides/authorization/scopes/](https://developer.spotify.com/documentation/general/guides/authorization/scopes/)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Tecnologias utilizadas
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Para esse projeto foi utilizado a 3 tecnologias: typescript, tailwindcss e NextJS
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Funcionalidades da aplicação.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Lista suas playlists
+2. Dá play em uma música
+3. Pausar uma música
+4. Passar a música, obs: desde de que tenha uma próxima música na sua fila de espera do spotify, não tendo simplismente não acontece nada.
+5. Voltar para música anterior, essa função tem a mesma observação da funcionalidade acima, porém no caso de ter uma música para voltar.
+6. Colocar o estado do playback como aleátorio, obs: essa função vai funcionar caso você esteja escutando uma playlist no spotify.
+7. Curtir uma música
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## UI do projeto.
