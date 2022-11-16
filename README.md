@@ -46,4 +46,53 @@ Para esse projeto foi utilizado a 3 tecnologias: typescript, tailwindcss e NextJ
 7. Curtir uma música
 
 
+## Demo da aplicação. Esse projeto foi hospeado na vercel e você pode acessar pelo link abaixo.
+
+[https://spotify-web-player-clone.vercel.app](https://spotify-web-player-clone.vercel.app/)
+
+
 ## UI do projeto.
+
+#### Desktop
+
+![desktop](./public/github-assets/desktop.png)
+
+
+</br>
+
+#### Mobile
+
+<div align="center">
+  <img src="./public/github-assets/smartphone.png" />
+</div>
+
+
+## Executando na sua prórpia máquina.
+Para executar o projeto é necessário algum passos e requisitos. O primeiro requsítico é ter o NodeJs instalado na sua máquina o sefundo é ter o git para clonar o projeto.
+
+#### Passo 1
+Clone o projeto com o comando.
+```bash
+git clone https://github.com/EnriqueSantos-dev/Spotify-Web-Player-Clone
+```
+
+#### Passo 2
+Agora um passo importante é cria um app no spotify para pode fazer as chamadas para a api.
+
+Siga o passo a passo da documentação
+</br>
+[https://developer.spotify.com/documentation/general/guides/authorization/app-settings/](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/)
+
+#### Passo 3
+Agora é depois de ter criado o seu app no spotify é necessário criar um arquivo env na raiz do projeto. Para facilitar eu deixei um arquivo env.example, clone ele e subistitua pelos dados do seu app do spotify, somente é necessário mudar o valor da variável ```SPOTIFY_CLIENT_SECRET``` e ```SPOTIFY_CLIENT_ID``` pelos valores do seu app.
+
+#### Passo 4
+Após todas essas etapas vc somente precisa rodar o servidor com o comando
+```bash
+npm install
+```
+para instalar as depências do projeto. E depois
+```bash
+npm run dev
+```
+para iniciar a aplicação.
