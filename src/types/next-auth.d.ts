@@ -12,6 +12,7 @@ declare module "next-auth/jwt" {
 declare module "next-auth" {
   interface DefaultSession {
     accessToken: string;
+    refreshToken: string;
     error: string;
   }
 

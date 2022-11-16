@@ -11,10 +11,16 @@ module.exports = {
           500: "#b3b3b3",
         },
       },
+      backgroundColor: {
+        overlay: "rgba(0,0,0,0.8)",
+      },
+      maxHeight: {
+        screenMax: "calc(100% - 245px)",
+      },
       backgroundImage: {
         "like-heart": "linear-gradient(135deg,#450af5,#c4efd9)",
       },
     },
   },
-  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
