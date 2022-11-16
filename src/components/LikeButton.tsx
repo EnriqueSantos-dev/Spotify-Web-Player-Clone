@@ -1,7 +1,6 @@
 import React from "react";
 import clsx from "clsx";
 import { HeartIcon } from "@heroicons/react/24/outline";
-import spotifyApi from "../lib/spotify-web-api-setup-config";
 import useSpotifyAxios from "../hooks/useSpotifyAxios";
 
 interface Props {
