@@ -18,14 +18,6 @@ function useSpotifyAxios() {
       return;
     }
 
-    if (
-      new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString() <
-      session?.expires!
-    ) {
-      signIn("spotify");
-      return;
-    }
-
     if (session?.accessToken) {
       api.defaults.headers.common[
         "Authorization"
